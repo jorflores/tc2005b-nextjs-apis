@@ -1,21 +1,30 @@
-import useAuth from "@/hooks/useAuth";
+import { parseCookies } from 'nookies';
 
-export default function HomePage() {
-  const { isLoading, isAuthenticated, role } = useAuth();
-    // Your home page content
 
-    if (isLoading) {
-      return <div>Loading...</div>;
-  }
-  
-  if (!isAuthenticated) {
-      return null;  // or a minimal layout that doesn't show protected content
-  }
+export async function getServerSideProps(context) {
+  const cookies = parseCookies(context);
+  const authToken = cookies.authToken || null;
 
-    return (
-        <div>
-            Welcome to the home page!
-            <p>Your permission role is: {role} </p> 
-        </div>
-    );
+  return {
+      props: {
+          authToken,
+      },
+  };
 }
+
+
+function HomePage({ authToken }) {
+  //const { isAuthenticated } = useAuth({ authToken });
+
+
+
+  return (
+      <div>
+          <h1>Home Page</h1>
+          {authToken ? <p>Welcome back!</p> : <p>You are not logged in.</p>}
+  
+      </div>
+  );
+}
+
+export default HomePage;

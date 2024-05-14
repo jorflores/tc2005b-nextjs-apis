@@ -1,27 +1,34 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { parseCookies } from 'nookies';
 
-const Users = () => {
+
+
+export async function getServerSideProps(context) {
+    const cookies = parseCookies(context);
+    const authToken = cookies.authToken || null;
+  
+    return {
+        props: {
+            authToken,
+        },
+    };
+  }
+  
+
+const Users = ({ authToken }) => {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchUsers = async () => {
-            const token = localStorage.getItem('token');  // Get the token from localStorage
-            if (!token) {
-                setError('Authentication error: No token found.');
-                setLoading(false);
-                return;
-            }
 
             try {
-                const response = await axios.get('http://localhost:4000/getAllUsers', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                const response = await axios.get('http://localhost:5000/users/getAllUsers', {
+                    withCredentials: true 
                 });
-                setUsers(response.data.data.users);  // Assuming the backend sends data in this format
+                setUsers(response.data.users);  // Assuming the backend sends data in this format
                 setLoading(false);
             } catch (err) {
                 setError(err.response?.data?.message || 'Failed to fetch users.');
@@ -41,7 +48,7 @@ const Users = () => {
             <ul>
                 {users.length > 0 ? (
                     users.map(user => (
-                        <li key={user._id}>{user.username}</li>
+                        <li key={user.id}>{user.phone}</li>
                     ))
                 ) : (
                     <p>No users found.</p>

@@ -4,35 +4,39 @@ import { useRouter } from 'next/router';
 import Link from 'next/link'; // Import the Link component
 
 export default function Login() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [phone, setPhone] = useState('123456');
+    const [password, setPassword] = useState('123456');
     const [message, setMessage] = useState('');
     const router = useRouter();
 
+
     const handleLogin = async (e) => {
+        
         e.preventDefault();
         try {
-            const { data } = await axios.post('/api/login', { username, password });
-            localStorage.setItem('token', data.token);  // Store the token in localStorage
+            const { data } = await axios.post('http://localhost:5000/users/login', { phone, password }, {
+                withCredentials: true  // This is necessary to handle cookies. Normally, when you make a cross-origin HTTP request, cookies and authorization headers are not sent or received unless withCredentials is set to true. 
+            });
+            console.log(data)
             setMessage('Login successful. Redirecting...');
             router.push('/');  // Redirect to homepage or dashboard as needed
         } catch (error) {
             setMessage(error.response?.data?.message || 'An error occurred');
         }
-    };
+    }
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen">
             <form className="p-6 bg-gray-100 rounded shadow-md" onSubmit={handleLogin}>
                 <div>
-                    <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">Username</label>
+                    <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">phone</label>
                     <input
                         type="text"
-                        id="username"
+                        id="phone"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         required
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
                     />
                 </div>
                 <div className="mt-4">
