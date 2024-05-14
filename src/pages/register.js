@@ -3,25 +3,19 @@ import axios from 'axios';
 import Link from 'next/link'; // Import the Link component
 
 export default function Register() {
-    const [username, setUsername] = useState('');
+    const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
-    const [csrfToken, setCsrfToken] = useState('');
 
-    useEffect(() => {
-        async function fetchCsrfToken() {
-          const { data } = await axios.get('/api/csrf-token');
-          setCsrfToken(data.csrfToken);
-        }
-    
-        fetchCsrfToken();
-      }, []);
+
+
 
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            const { data } = await axios.post('/api/register', { username, password, _csrf: csrfToken });
-            setMessage('Registration successful. User ID: ' + data.user);
+            const { data } = await axios.post('http://localhost:5000/users/signup', { phone, password });
+            console.log(data)
+            setMessage('Registration successful');
         } catch (error) {
             setMessage(error.response?.data?.message || 'An error occurred');
         }
@@ -37,8 +31,8 @@ export default function Register() {
                         id="username"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         required
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
                     />
                 </div>
                 <div className="mt-4">
