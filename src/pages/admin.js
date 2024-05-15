@@ -1,22 +1,14 @@
 
-import { parseCookies } from 'nookies';
+import { withAuth } from '../lib/auth';
 
 
-export async function getServerSideProps(context) {
-  const cookies = parseCookies(context);
-  const authToken = cookies.authToken || null;
+export default function Admin({ user }) {
 
-  return {
-      props: {
-          authToken,
-      },
-  };
+if (user.role != "admin"){
+    return (
+        <p>Sorry you are not an admin</p>
+    )
 }
-
-
-export default function Admin({ authToken }) {
-
-
   
     return (
         <div>
@@ -25,3 +17,11 @@ export default function Admin({ authToken }) {
         </div>
     );
 }
+
+
+
+export async function getServerSideProps(context) {
+    return withAuth(context);
+  }
+  
+

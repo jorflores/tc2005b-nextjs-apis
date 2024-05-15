@@ -1,15 +1,11 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-//import useAuth from '@/hooks/useAuth';
 
-const Navbar = ({ authToken }) => {
+const Navbar = ({ user }) => {
     const router = useRouter();
-        //const { isAuthenticated } = useAuth(authToken);
-
-    console.log("Token: " + authToken);
 
     const handleLogOff = async () => {
-        // Call the logout API route
+
         await fetch('/api/logout', {
             method: 'POST',
         });
@@ -17,7 +13,7 @@ const Navbar = ({ authToken }) => {
         router.push('/login'); // Redirect to the login page
     };
 
-    if (!authToken){
+    if (!user){
         return null
     }
     
@@ -27,12 +23,14 @@ const Navbar = ({ authToken }) => {
             <div className="container mx-auto flex justify-between items-center">
                 <div className="flex space-x-4">
                     <Link className="hover:bg-gray-700 p-2 rounded" href="/">
-                        Home
+                        Home  
                     </Link>
                     <Link className="hover:bg-gray-700 p-2 rounded" href="/users">
                         Users
                     </Link>
-                    {/* Additional links can be added here */}
+                    {user.role == "admin" ? <Link className="hover:bg-gray-700 p-2 rounded" href="/admin">
+                    Admin
+                </Link> : null }
                 </div>
                 <button onClick={handleLogOff} className="bg-red-500 hover:bg-red-700 p-2 rounded">
                     LogOff

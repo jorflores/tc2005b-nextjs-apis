@@ -1,30 +1,28 @@
-import { parseCookies } from 'nookies';
+import { withAuth } from '../lib/auth';
 
 
-export async function getServerSideProps(context) {
-  const cookies = parseCookies(context);
-  const authToken = cookies.authToken || null;
-
-  return {
-      props: {
-          authToken,
-      },
-  };
-}
-
-
-function HomePage({ authToken }) {
-  //const { isAuthenticated } = useAuth({ authToken });
-
+function HomePage({user}) {
 
 
   return (
       <div>
           <h1>Home Page</h1>
-          {authToken ? <p>Welcome back!</p> : <p>You are not logged in.</p>}
+          {/*authToken ? <p>Welcome back!</p> : <p>You are not logged in.</p>*/}
+          {user.role === 'admin' && <p>You are an admin.</p>}
+          {<p>User Id: {user.id}</p>}
+          {<p>User Role: {user.role}</p>}
   
       </div>
   );
 }
+
+
+
+
+export async function getServerSideProps(context) {
+  return withAuth(context);
+}
+
+
 
 export default HomePage;

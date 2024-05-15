@@ -13,8 +13,10 @@ export default function Login() {
     const handleLogin = async (e) => {
         
         e.preventDefault();
+       
         try {
-            const { data } = await axios.post('http://localhost:5000/users/login', { phone, password }, {
+            const { data } = await axios.post('http://localhost:5000/users/login', { phone, password }, 
+            {
                 withCredentials: true  // This is necessary to handle cookies. Normally, when you make a cross-origin HTTP request, cookies and authorization headers are not sent or received unless withCredentials is set to true. 
             });
             console.log(data)
