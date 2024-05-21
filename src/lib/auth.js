@@ -1,6 +1,6 @@
 // lib/auth.js
-import { parseCookies } from 'nookies';
-import jwt from 'jsonwebtoken';
+import { parseCookies } from "nookies";
+import jwt from "jsonwebtoken";
 
 export async function withAuth(context) {
   const cookies = parseCookies(context);
@@ -9,7 +9,7 @@ export async function withAuth(context) {
   if (!token) {
     return {
       redirect: {
-        destination: '/login',
+        destination: "/login",
         permanent: false,
       },
     };
@@ -23,7 +23,7 @@ export async function withAuth(context) {
   } catch (error) {
     return {
       redirect: {
-        destination: '/login',
+        destination: "/login",
         permanent: false,
       },
     };
