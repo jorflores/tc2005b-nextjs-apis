@@ -25,9 +25,9 @@ const Navbar = ({ user }) => {
                     <Link className="hover:bg-gray-700 p-2 rounded" href="/">
                         Home  
                     </Link>
-                    <Link className="hover:bg-gray-700 p-2 rounded" href="/users">
+                    {user.role == "admin" ? <Link className="hover:bg-gray-700 p-2 rounded" href="/users">
                         Users
-                    </Link>
+                    </Link> : null }
                     {user.role == "admin" ? <Link className="hover:bg-gray-700 p-2 rounded" href="/admin">
                     Admin
                 </Link> : null }
