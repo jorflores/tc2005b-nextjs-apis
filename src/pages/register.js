@@ -6,9 +6,11 @@ export default function Register() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Nuevo estado para el loading
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Iniciar el loading
     try {
       const { data } = await axios.post("http://localhost:4000/users/signup", {
         phone,
@@ -18,6 +20,8 @@ export default function Register() {
       setMessage("Registration successful");
     } catch (error) {
       setMessage(error.response?.data?.message || "An error occurred");
+    } finally {
+      setIsLoading(false); // Detener el loading
     }
   };
 
@@ -65,6 +69,15 @@ export default function Register() {
         >
           Register
         </button>
+        {isLoading && (
+          <div className="mt-4 flex justify-center">
+            <img
+              src="https://i.gifer.com/ZKZg.gif"
+              alt="Loading"
+              className="w-8 h-8"
+            />
+          </div>
+        )}
         {message && <p className="mt-4 text-red-600">{message}</p>}
         <div className="mt-4">
           <p className="text-center text-sm text-gray-600">
